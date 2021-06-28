@@ -1,0 +1,57 @@
+// please link to the "Add Review Shcedule Button"
+function createReviewCycle() {
+
+  sheet = SpreadsheetApp.getActiveSheet()
+  workName = sheet.getRange("B3").getValues()
+
+  repeat_days = [0,1,7,21,49]
+  color_list = [1,2,3,4,5,6,7,8]
+  color = color_list[Math.floor(Math.random()*8)]
+
+  const my_calender = CalendarApp.getDefaultCalendar();
+  const today = new Date()
+  
+  for (let i = 0; i < 5; i++){
+    let title = workName
+
+    if (i == 0){
+      title = workName + " " + "(1st)"
+    }else if (i == 1) {
+      title = workName + " " + "(2nd)"
+    }else if (i == 2) {
+      title = workName + " " + "(3rd)"
+    }else{
+      title = workName + " (" + (i + 1) + "th)"
+    }
+    let date = new Date()
+  
+    date.setDate(date.getDate() + repeat_days[i]);
+    const event = my_calender.createAllDayEvent(title, date);
+    
+    event.setColor(color)
+  } 
+}
+
+
+// please link to the "Delete Data Button"
+function deleteEvent() {
+  
+  ///////////////////////////////////
+  var id = "your gmail address here";
+  ///////////////////////////////////
+
+  var cal = CalendarApp.getCalendarById(id);
+
+  sheet = SpreadsheetApp.getActiveSheet()
+  let cancel_list = [sheet.getRange("C18").getValues(),sheet.getRange("C21").getValues(),sheet.getRange("C22").getValues(),sheet.getRange("C23").getValues(),sheet.getRange("C24").getValues()]
+
+  for (day=0; day < cancel_list.length;day++){
+    var date = new Date(cancel_list[day]); 
+    var events = cal.getEventsForDay(date);
+    for (var i in events) {
+      var event = events[i];
+      event.deleteEvent();
+    }
+  }
+
+}
